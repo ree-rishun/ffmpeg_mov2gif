@@ -32,6 +32,26 @@
       margin: 0;
     }
 
+    /* --- プレビュー部分 --- */
+    #preview {
+
+    }
+    #preview span {
+      display: inline-block;
+      width: 40vw;
+      height: auto;
+      min-height: 20vw;
+      background: rgba(255, 83, 106, 0.29);
+      vertical-align: top;
+    }
+    #preview span:nth-child(2) {
+      height: 100%;
+    }
+    #preview img, #preview video {
+      display: none;
+      width: 100%;
+    }
+
     /* --- ファイル入力部分 --- */
     label {
       display: block;
@@ -69,6 +89,20 @@
       id="videoFile"
       type="file">
   </label>
+
+  <div id="preview">
+    <span>
+      <video
+        id="videoPreview"
+        controls></video>
+    </span>
+    <span>
+      <img
+        id="imagePreview"
+        alt="変換結果"/>
+    </span>
+  </div>
+
   <label>
     <button
       id="convertButton">
@@ -76,51 +110,7 @@
     </button>
   </label>
 
-  <img id="player"/>
-
   <!-- JS -->
-  <script>
-    const { createFFmpeg, fetchFile } = FFmpeg
-    const ffmpeg = createFFmpeg({ log: true })
-
-    // 入力ファイルの格納変数
-    let videoFile = null
-
-    // 入力ファイルのアップデート
-    async function updateVideo ({ target: { files } }) {
-      console.log(files)
-      // ビデオファイルのアップデート
-      videoFile = files
-    }
-
-    // GIFへの変換処理
-    async function convertGIF () {
-      // メッセージエリアを取得
-      let messageArea = document.getElementById('inputfiles');
-
-      console.log('入力ファイルチェック')
-      console.log(videoFile)
-
-      // FFmpegの読み込み
-      await ffmpeg.load()
-      ffmpeg.FS('writeFile', videoFile[0].name, await fetchFile(videoFile[0]))
-      await ffmpeg.run('-i', videoFile[0].name, '-vf', 'scale=320:-1', '-r', '10', 'output.gif')
-      const data = ffmpeg.FS('readFile', 'output.gif')
-
-      const video = document.getElementById('player')
-      video.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }))
-    }
-
-    // 処理開始ボタンのクリック時処理
-    document
-      .getElementById('convertButton').onclick = function() {
-      convertGIF()
-    }
-
-    // ファイル入力の監視
-    document
-      .getElementById('videoFile')
-      .addEventListener('change', updateVideo)
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
