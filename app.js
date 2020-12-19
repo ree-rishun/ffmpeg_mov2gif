@@ -1,18 +1,19 @@
 const { createFFmpeg, fetchFile } = FFmpeg
-const ffmpeg = createFFmpeg({ log: true })
+const ffmpeg = createFFmpeg({ log: false, progress: p => displayProgress(p)})
 
 // エレメントの定義
-const imagePreview = document.getElementById('imagePreview')
-const videoPreview = document.getElementById('videoPreview')
+const imagePreview = document.getElementById('imagePreview')    // GIF変換結果
+const videoPreview = document.getElementById('videoPreview')    // アップロード動画プレビュー
+const convertButton = document.getElementById('convertButton')  // 変換ボタン
 
 // 入力ファイルの格納変数
 let videoFile = null
 
 // 入力ファイルのアップデート
 async function updateVideo ({ target: { files } }) {
-  console.log(files)
   // ビデオファイルのアップデート
   videoFile = files
+
   // プレビューの表示
   videoPreview.src = window.URL.createObjectURL(files[0])
   videoPreview.style.display = 'block'
@@ -23,26 +24,42 @@ async function convertGIF () {
   // メッセージエリアを取得
   let messageArea = document.getElementById('inputfiles');
 
-  console.log('入力ファイルチェック')
-  console.log(videoFile)
-
   // FFmpegの読み込み
   if (!ffmpeg.isLoaded()) {
     await ffmpeg.load()
   }
+
+  // ファイルに変換
   ffmpeg.FS('writeFile', videoFile[0].name, await fetchFile(videoFile[0]))
+
+  // コマンドの実行
   await ffmpeg.run('-i', videoFile[0].name, '-r', '10', 'output.gif')
+
+  // 変換結果を取得
   const data = ffmpeg.FS('readFile', 'output.gif')
 
+  // 変換結果を表示
   imagePreview.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }))
   imagePreview.style.display = 'block'
 }
 
-// リサイズ値のアップデート
+// 進行情報の表示
+function displayProgress (progress) {
+  console.log(progress)
+  convertButton.innerText = Math.round(100 * progress.ratio) + '%'
+
+  if (progress.ratio >= 1) {
+    setTimeout(
+      function () {
+        convertButton.innerText = 'GIF画像に変換'
+      },
+      1000
+    )
+  }
+}
 
 // 処理開始ボタンのクリック時処理
-document
-  .getElementById('convertButton').onclick = function() {
+convertButton.onclick = function() {
   convertGIF()
 }
 
@@ -51,17 +68,3 @@ document
   .getElementById('videoFile')
   .addEventListener('change', updateVideo)
 
-// リサイズ値の監視
-const resize_range = document.getElementById('videoResize_range')
-const resize_numberX = document.getElementById('videoResize_numberX')
-const resize_numberY = document.getElementById('videoResize_numberY')
-
-resize_range.addEventListener('input', function () {
-  resize_numberY.value = resize_range.value
-})
-resize_numberX.addEventListener('input', function () {
-  resize_range.value = resize_numberX.value
-})
-resize_numberY.addEventListener('input', function () {
-  resize_range.value = resize_numberY.value
-})
