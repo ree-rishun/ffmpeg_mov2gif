@@ -21,33 +21,36 @@ async function updateVideo ({ target: { files } }) {
 
 // GIFへの変換処理
 async function convertGIF () {
-  // メッセージエリアを取得
-  let messageArea = document.getElementById('inputfiles');
-
   // FFmpegの読み込み
   if (!ffmpeg.isLoaded()) {
     await ffmpeg.load()
   }
+  const videoName = videoFile[0].name
 
-  // ファイルに変換
-  ffmpeg.FS('writeFile', videoFile[0].name, await fetchFile(videoFile[0]))
+  // MEMFSへ保存
+  ffmpeg.FS('writeFile', videoName, await fetchFile(videoFile[0]))
 
   // コマンドの実行
-  await ffmpeg.run('-i', videoFile[0].name, '-r', '10', 'output.gif')
+  await ffmpeg.run('-i', videoName, '-r', '10', 'output.gif')
 
-  // 変換結果を取得
+  // MEMFSからファイルを取得
   const data = ffmpeg.FS('readFile', 'output.gif')
 
   // 変換結果を表示
   imagePreview.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }))
   imagePreview.style.display = 'block'
+
+  // データのリンク解除
+  ffmpeg.FS('unlink', videoName)
+  ffmpeg.FS('unlink', 'output.gif')
 }
 
 // 進行情報の表示
 function displayProgress (progress) {
-  console.log(progress)
+  // 送信ボタン部分に進行状況を表示
   convertButton.innerText = Math.round(100 * progress.ratio) + '%'
 
+  // 変換が完了したら変換ボタンに戻す
   if (progress.ratio >= 1) {
     setTimeout(
       function () {
