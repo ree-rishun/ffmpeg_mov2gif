@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+  <meta charset="UTF-8">
+  <title>FFmpegTest</title>
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js"></script>
+
+  <!-- CSS -->
+  <style>
+    body {
+      text-align: center;
+      color: #111111;
+    }
+
+    /* --- タイトル部分 --- */
+    #title {
+      margin: 20px 0;
+    }
+    #title h1 {
+      display: block;
+      height: 1.8rem;
+      line-height: 1.8rem;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    #title p {
+      display: block;
+      height: 1rem;
+      line-height: 1rem;
+      font-size: 1rem;
+      color: #666666;
+      margin: 0;
+    }
+
+    /* --- ファイル入力部分 --- */
+    label {
+      display: block;
+      margin: 20px 0;
+    }
+    #convertButton {
+      width: 200px;
+      height: 50px;
+      line-height: 50px;
+      border-radius: 50px;
+      border: none;
+      outline: none;
+      background: #ff536a;
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+      -webkit-transition: all 0.3s ease;
+      -moz-transition: all 0.3s ease;
+      -o-transition: all 0.3s ease;
+      transition: all  0.3s ease;
+    }
+    #convertButton:hover {
+      background: rgba(255, 83, 109, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div id="title">
+    <h1>Video2GIF</h1>
+    <p>Powerd by FFmpeg</p>
+  </div>
+  <p id="message"></p>
+  <label>
+    <input
+      id="videoFile"
+      type="file">
+  </label>
+  <label>
+    <button
+      id="convertButton">
+      GIF画像に変換
+    </button>
+  </label>
+
+  <img id="player"/>
+
+  <!-- JS -->
+  <script>
+    const { createFFmpeg, fetchFile } = FFmpeg
+    const ffmpeg = createFFmpeg({ log: true })
+
+    // 入力ファイルの格納変数
+    let videoFile = null
+
+    // 入力ファイルのアップデート
+    async function updateVideo ({ target: { files } }) {
+      console.log(files)
+      // ビデオファイルのアップデート
+      videoFile = files
+    }
+
+    // GIFへの変換処理
+    async function convertGIF () {
+      // メッセージエリアを取得
+      let messageArea = document.getElementById('inputfiles');
+
+      console.log('入力ファイルチェック')
+      console.log(videoFile)
+
+      // FFmpegの読み込み
+      await ffmpeg.load()
+      ffmpeg.FS('writeFile', videoFile[0].name, await fetchFile(videoFile[0]))
+      await ffmpeg.run('-i', videoFile[0].name, '-vf', 'scale=320:-1', '-r', '10', 'output.gif')
+      const data = ffmpeg.FS('readFile', 'output.gif')
+
+      const video = document.getElementById('player')
+      video.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }))
+    }
+
+    // 処理開始ボタンのクリック時処理
+    document
+      .getElementById('convertButton').onclick = function() {
+      convertGIF()
+    }
+
+    // ファイル入力の監視
+    document
+      .getElementById('videoFile')
+      .addEventListener('change', updateVideo)
+  </script>
+</body>
+</html>

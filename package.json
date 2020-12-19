@@ -1,0 +1,19 @@
+{
+  "name": "ffmpeg_mov2gif",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ree-rishun/ffmpeg_mov2gif.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ree-rishun/ffmpeg_mov2gif/issues"
+  },
+  "homepage": "https://github.com/ree-rishun/ffmpeg_mov2gif#readme"
+}
