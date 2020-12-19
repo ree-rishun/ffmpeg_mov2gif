@@ -2,81 +2,12 @@
 <html lang="jp">
 <head>
   <meta charset="UTF-8">
-  <title>FFmpegTest</title>
+  <title>Video2GIF</title>
+  <meta name="viewport"content="width=device-width,initial-scale=1">
   <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js"></script>
 
   <!-- CSS -->
-  <style>
-    body {
-      text-align: center;
-      color: #111111;
-    }
-
-    /* --- タイトル部分 --- */
-    #title {
-      margin: 20px 0;
-    }
-    #title h1 {
-      display: block;
-      height: 1.8rem;
-      line-height: 1.8rem;
-      font-size: 1.8rem;
-      margin: 0;
-    }
-    #title p {
-      display: block;
-      height: 1rem;
-      line-height: 1rem;
-      font-size: 1rem;
-      color: #666666;
-      margin: 0;
-    }
-
-    /* --- プレビュー部分 --- */
-    #preview {
-
-    }
-    #preview span {
-      display: inline-block;
-      width: 40vw;
-      height: auto;
-      min-height: 20vw;
-      background: rgba(255, 83, 106, 0.29);
-      vertical-align: top;
-    }
-    #preview span:nth-child(2) {
-      height: 100%;
-    }
-    #preview img, #preview video {
-      display: none;
-      width: 100%;
-    }
-
-    /* --- ファイル入力部分 --- */
-    label {
-      display: block;
-      margin: 20px 0;
-    }
-    #convertButton {
-      width: 200px;
-      height: 50px;
-      line-height: 50px;
-      border-radius: 50px;
-      border: none;
-      outline: none;
-      background: #ff536a;
-      color: #ffffff;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-transition: all 0.3s ease;
-      -moz-transition: all 0.3s ease;
-      -o-transition: all 0.3s ease;
-      transition: all  0.3s ease;
-    }
-    #convertButton:hover {
-      background: rgba(255, 83, 109, 0.7);
-    }
-  </style>
+  <link href="style.css" rel="stylesheet">
 </head>
 <body>
   <div id="title">
