@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="jp">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>Video2GIF</title>
-  <meta name="viewport"content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <!-- JS -->
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js"></script>
+  <script src="./lib/ffmpeg.min.js"></script>
+  <script>
+    console.log('script')
+    console.log(crossOriginIsolated)
+    if (!crossOriginIsolated) var SharedArrayBuffer = ArrayBuffer;
+    console.log(SharedArrayBuffer)
+  </script>
 
   <!-- CSS -->
   <link href="style.css" rel="stylesheet">

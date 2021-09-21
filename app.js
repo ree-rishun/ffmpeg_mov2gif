@@ -1,5 +1,9 @@
 const { createFFmpeg, fetchFile } = FFmpeg
-const ffmpeg = createFFmpeg({ log: true, progress: p => displayProgress(p)})
+const ffmpeg = createFFmpeg({
+  corePath: './lib/ffmpeg-core.js',
+  log: true,
+  progress: p => displayProgress(p)
+})
 
 // エレメントの定義
 const imagePreview = document.getElementById('imagePreview')    // GIF変換結果
