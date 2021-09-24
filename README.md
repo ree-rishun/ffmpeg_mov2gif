@@ -24,3 +24,6 @@ GitHubPagesにてデモを公開しています！
 ## 使い方
 以下のリンクから各種ライブラリをダウンロード
 - https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js
+- https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js
+- https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.worker.js
+- https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.wasm
